@@ -1,0 +1,74 @@
+from random import choice
+import mysql.connector
+
+myconn = mysql.connector.connect(
+      host='localhost',
+      user='root',
+      passwd='1234',
+      database='rpsgame')
+
+mycur = myconn.cursor()
+scor = 0
+
+while True:
+    user_choice = input('Chose one of rock, paper or scissor or End to stop and write it: ')
+    pc = ('rock', 'paper', 'scissor')
+    PCoice = choice(pc)
+
+    if user_choice == PCoice:
+        print('draw')
+        scor += 0.5
+        sqly = ("INSERT INTO match1(bot,player,result,score) VALUES(%s,%s,%s,%s)")
+        data = (f'{PCoice}',f'{user_choice}','draw',f'{scor}')
+        mycur.execute(sqly, data)
+
+    elif user_choice == 'rock' and PCoice == 'paper':
+        print('You lost')
+        scor -= 1
+        sqly = ("INSERT INTO match1(bot,player,result,score) VALUES(%s,%s,%s,%s)")
+        data = (f'{PCoice}', f'{user_choice}', 'lose', f'{scor}')
+        mycur.execute(sqly, data)
+
+    elif user_choice == 'rock' and PCoice == 'scissor':
+        print('You won')
+        scor += 1
+        sqly = ("INSERT INTO match1(bot,player,result,score) VALUES(%s,%s,%s,%s)")
+        data = (f'{PCoice}', f'{user_choice}', 'won', f'{scor}')
+        mycur.execute(sqly, data)
+
+    elif user_choice == 'paper' and PCoice == 'scissor':
+        print('You lost')
+        scor -= 1
+        sqly = ("INSERT INTO match1(bot,player,result,score) VALUES(%s,%s,%s,%s)")
+        data = (f'{PCoice}', f'{user_choice}', 'lose', f'{scor}')
+        mycur.execute(sqly, data)
+
+    elif user_choice == 'paper' and PCoice == 'rock':
+        print('You won')
+        scor += 1
+        sqly = ("INSERT INTO match1(bot,player,result,score) VALUES(%s,%s,%s,%s)")
+        data = (f'{PCoice}', f'{user_choice}', 'won', f'{scor}')
+        mycur.execute(sqly, data)
+
+    elif user_choice == 'scissor' and PCoice == 'roc':
+        print('You lost')
+        scor -= 1
+        sqly = ("INSERT INTO match1(bot,player,result,score) VALUES(%s,%s,%s,%s)")
+        data = (f'{PCoice}', f'{user_choice}', 'lose', f'{scor}')
+        mycur.execute(sqly, data)
+
+    elif user_choice == 'scissor' and PCoice == 'paper':
+        print('You won')
+        scor += 1
+        sqly = ("INSERT INTO match1(bot,player,result,score) VALUES(%s,%s,%s,%s)")
+        data = (f'{PCoice}', f'{user_choice}', 'won', f'{scor}')
+        mycur.execute(sqly, data)
+
+    elif user_choice == 'End':
+        break
+
+    else:
+        print("Enter valid choice")
+    print(f'Score: {scor}')
+
+myconn.commit()
